@@ -1,45 +1,20 @@
 from tkinter import font
-from db import database # Import Database class
+from lib.db import database # Import Database class
+from lib.budgetFunctions import * # Import Apps functionality 
 import getpass
 import tkinter as tk
 
-def monthView():
-    print("dababby??")
-
-def addMoney():
-    print("dababby??")
-
-def addCost():
-    print("dababby??")
-
-def add2Piggy():
-    print("dababby??")
-
-def getPiggy():
-    print("dababby??")
-
-def oweMoney():
-    print("dababby??")
-
 def main():
+
     databaseConnector = database() # Database object
     root = tk.Tk()
-
-    # Main Page 
-
-    # Canvas Init
-    canvas = tk.Canvas(root , width= 1280, height= 720)
-    canvas.grid(columnspan=3, rowspan=7)
-
-    # App Icon? TBA
-    #
-    #
-    #
+    root.title("PyMyBudget - The python Expenses Tracker")
+    
+    root.geometry('1280x720')
 
     # Main page header
-    header = tk.Label(root, text = "Hello "+ getpass.getuser() + " what are we doing today?", font= 100)
-    header.grid(columnspan=3, column=0,row=0)
-
+    header = tk.Label(root, text = "\n      Hello "+ getpass.getuser() + " what are we doing today?", font=("Garamond",20))
+    header.grid(column=0,row=0)
 
     # View Month button
     logsBtnText = tk.StringVar()
@@ -49,8 +24,7 @@ def main():
         textvariable= logsBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     logsBtnText.set("View your Month")
-    logsBtn.grid(column=1,row=1)
-    
+    logsBtn.grid(column=1,row=2)
 
     # Add Income button
     inBtnText = tk.StringVar()
@@ -60,7 +34,7 @@ def main():
         textvariable= inBtnText, font="Calibri", bg= "#3EA055", fg="white", height=2, width= 25 #style
     )
     inBtnText.set("Add Money")
-    inBtn.grid(column=1,row=2)
+    inBtn.grid(column=1,row=3)
 
 
     # Outcome button
@@ -71,7 +45,7 @@ def main():
         textvariable= outBtnText, font="Calibri", bg= "#FF7F50", fg="white", height=2, width= 25 #style
     )
     outBtnText.set("Add Bill")
-    outBtn.grid(column=1,row=3)
+    outBtn.grid(column=1,row=4)
     
 
     # Add to piggy button
@@ -82,7 +56,7 @@ def main():
         textvariable= piginBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     piginBtnText.set("Add Money to yout Piggy")
-    piginsBtn.grid(column=1,row=4)
+    piginsBtn.grid(column=1,row=5)
     
 
     # Get from piggy button
@@ -93,7 +67,7 @@ def main():
         textvariable= pigoutBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     pigoutBtnText.set("Get Money from your piggy")
-    pigoutBtn.grid(column=1,row=5)
+    pigoutBtn.grid(column=1,row=6)
     
 
     # Add owed button
@@ -104,9 +78,7 @@ def main():
         textvariable= oweBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     oweBtnText.set("Add Money you owe")
-    oweBtn.grid(column=1,row=6)
-
-
+    oweBtn.grid(column=1,row=7)
 
     root.mainloop()
 
