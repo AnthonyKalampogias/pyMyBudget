@@ -27,11 +27,15 @@ class database:
                 )
         self.connectionString.commit()
     
-    def getFromDB(self, toQuery = ""):
+    def getFromDB(self, requestedDate = "", toQuery = ""):
+        
+        if requestedDate == "": # If there is not a date provided check for current month
+            requestedDate = self.currentDate
+
         if (toQuery == ""):
-            self.cursor.execute('SELECT * FROM ' + self.currentDate )
+            self.cursor.execute('SELECT * FROM ' + requestedDate )
             data = self.cursor.fetchall()
         else:
-            self.cursor.execute("select "+ toQuery +" from "+ self.currentDate)
+            self.cursor.execute("select "+ toQuery +" from "+ requestedDate)
             data = self.cursor.fetchall()
         return data
