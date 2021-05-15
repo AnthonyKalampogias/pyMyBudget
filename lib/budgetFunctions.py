@@ -7,7 +7,8 @@ databaseConnector = database() # Database object
 
 def monthView(root):
     # newWindow = tk.Toplevel(root)
-    month2Query = otherMonthView(root)
+    month2Query = otherMonthView(root, "MAYkk ") # Can't parse, no year
+    month2Query = otherMonthView(root, "MAYkk 2021") # Will parse, works!
     MonthInfo = databaseConnector.getFromDB(month2Query)
     month = tk.Label(root, text= MonthInfo)
     print("______________________________________________")
@@ -67,4 +68,5 @@ def dateParse(provided):
             print(1/0)
 
     except:
-        return("Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!")
+        print("Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!")
+        return("")
