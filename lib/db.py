@@ -12,7 +12,7 @@ class database:
         #if the count is not 1, then table doesn't exists
         self.cursor.execute("SELECT count(name) FROM sqlite_master WHERE type='table' AND name='"+ self.currentDate +"' ")
         if self.cursor.fetchone()[0]!=1 :
-            self.cursor.execute("CREATE TABLE "+ self.currentDate + "date TEXT, income REAL, outcome REAL, toPiggy REAL, fromPiggy REAL, oweMoney REAL, note TEXT")
+            self.cursor.execute("CREATE TABLE "+ self.currentDate + " (date TEXT, income REAL, outcome REAL, toPiggy REAL, fromPiggy REAL, oweMoney REAL, note TEXT)")
         
     def addToDatabase(self, income, outcome, toPiggy, fromPiggy, oweMoney, note):
         self.cursor.execute("INSERT INTO "+datetime.now().strftime('%B') + str(datetime.now().year)+" VALUES (?, ?, ?, ?, ?, ?, ?)",
