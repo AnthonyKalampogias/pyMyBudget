@@ -7,8 +7,8 @@ databaseConnector = database() # Database object
 
 def monthView(root):
     # newWindow = tk.Toplevel(root)
-    month2Query = otherMonthView(root, "MAYkk ") # Can't parse, no year
-    month2Query = otherMonthView(root, "MAYkk 2021") # Will parse, works!
+    # month2Query = otherMonthView("MAYkk ") # Can't parse, no year
+    month2Query = otherMonthView("MAYkk 2021") # Will parse, works!
     MonthInfo = databaseConnector.getFromDB(month2Query)
     month = tk.Label(root, text= MonthInfo)
     print("______________________________________________")
@@ -21,23 +21,61 @@ def monthView(root):
     
     
 def addMoney(root):
-    print("dababby??")
+    # newWindow = tk.Toplevel(root)
+    # Temp Values 
+    income= 150
+    outcome= 0
+    toPiggy= 0
+    fromPiggy= 0
+    oweMoney= 0
+    note = "Birthday Gift"
+    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 def addCost(root):
-    print("dababby??")
+    # Temp Values 
+    income= 0
+    outcome= 150
+    toPiggy= 0
+    fromPiggy= 0
+    oweMoney= 0
+    note = "Hotel checkout"
+    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 def add2Piggy(root):
-    print("dababby??")
+     # Temp Values 
+    income= 0
+    outcome= 0
+    toPiggy= 100
+    fromPiggy= 0
+    oweMoney= 0
+    note = "Added to piggy!"
+    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 def getPiggy(root):
-    print("dababby??")
+     # Temp Values 
+    income= 0
+    outcome= 0
+    toPiggy= 0
+    fromPiggy= 15
+    oweMoney= 0
+    note = "Got Money from your piggy!"
+    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 def oweMoney(root):
-    print("dababby??")
+     # Temp Values 
+    income= 0
+    outcome= 150
+    toPiggy= 0
+    fromPiggy= 0
+    oweMoney= 1000
+    note = "You owe {} !".format(oweMoney)
+    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 
-def otherMonthView(root,usrInput):
-    parsedMonth = dateParse(usrInput)
+def otherMonthView(usrInput): # Check if the user provided a string, if so give to the parser to check it
+    parsedMonth = ""
+    if usrInput != "":
+        parsedMonth = dateParse(usrInput)
     return parsedMonth
 
 def dateParse(provided):
@@ -70,3 +108,16 @@ def dateParse(provided):
     except:
         print("Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!")
         return("")
+
+
+def add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note):
+    # Is be used by every button that adds to the table
+    income = databaseConnector.addToDatabase(
+        income,  #Income
+        outcome,  # Outcome
+        toPiggy, # Piggy In/out
+        fromPiggy,  # Owed Money
+        oweMoney, # Note
+        note
+    )
+    monthView(root)

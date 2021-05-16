@@ -73,7 +73,7 @@ def main():
     oweBtnText = tk.StringVar()
     oweBtn = tk.Button(
         root, #obj
-        command=lambda:oweMoney(), # function
+        command=lambda:oweMoney(root), # function
         textvariable= oweBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     oweBtnText.set("Add Money you owe")
