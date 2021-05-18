@@ -13,7 +13,7 @@ def main():
 
     # Main page header
     header = tk.Label(root, text = "\n      Hello "+ getpass.getuser() + " what are we doing today?", font=("Garamond",20))
-    header.grid(column=0,row=0)
+    header.pack()
 
     # View Month button
     logsBtnText = tk.StringVar()
@@ -23,7 +23,7 @@ def main():
         textvariable= logsBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     logsBtnText.set("View your Month")
-    logsBtn.grid(column=1,row=2,pady= 10)
+    logsBtn.pack(pady= 10)
 
     # Add Income button
     inBtnText = tk.StringVar()
@@ -33,7 +33,7 @@ def main():
         textvariable= inBtnText, font="Calibri", bg= "#3EA055", fg="white", height=2, width= 25 #style
     )
     inBtnText.set("Add Money")
-    inBtn.grid(column=1,row=3,pady= 10)
+    inBtn.pack(pady= 10)
 
 
     # Outcome button
@@ -44,7 +44,7 @@ def main():
         textvariable= outBtnText, font="Calibri", bg= "#FF7F50", fg="white", height=2, width= 25 #style
     )
     outBtnText.set("Add Bill")
-    outBtn.grid(column=1,row=4,pady= 10)
+    outBtn.pack(pady= 10)
 
 
     # Add to piggy button
@@ -55,7 +55,7 @@ def main():
         textvariable= piginBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     piginBtnText.set("Add Money to your Piggy")
-    piginsBtn.grid(column=1,row=5,pady= 10)
+    piginsBtn.pack(pady= 10)
 
 
     # Get from piggy button
@@ -66,7 +66,7 @@ def main():
         textvariable= pigoutBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     pigoutBtnText.set("Get Money from your piggy")
-    pigoutBtn.grid(column=1,row=6,pady= 10)
+    pigoutBtn.pack(pady= 10)
 
 
     # Add owed button
@@ -77,7 +77,7 @@ def main():
         textvariable= oweBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
     )
     oweBtnText.set("Add Money you owe")
-    oweBtn.grid(column=1,row=7,pady= 10)
+    oweBtn.pack(pady= 10)
 
     root.mainloop()
 
