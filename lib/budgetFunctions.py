@@ -1,14 +1,13 @@
-from tkinter import ttk, Text
+from tkinter import ttk, Text, Label, Entry, StringVar
 import tkinter as tk
 from .db import database # Import Database class
-
 import re
 
 databaseConnector = database() # Database object
 
 def monthView(root):
 
-    monthWindow = tk.Toplevel(root, width=1100, height=500)
+    monthWindow = tk.Toplevel(root, width=900, height=500)
     monthWindow.title("Expenses Calendar for {}".format(databaseConnector.currentDate))
     
     # Setup the output Tree
@@ -28,12 +27,25 @@ def monthView(root):
     tree.column("#7", anchor=tk.CENTER)
     tree.heading("#7", text="Comments")
 
-    # Get records from DB
-    MonthInfo = databaseConnector.getFromDB()
-    for date in MonthInfo:
-        tree.insert("", tk.END, values=date)
-    
     tree.pack(fill="x")
+
+    monthLabel=StringVar()
+    monthLabel.set("Search records from other months ")
+    labelDir=Label(monthWindow, textvariable=monthLabel, height=4)
+    labelDir.pack(side="left")
+
+    directory=StringVar(None)
+    dirname=Entry(monthWindow,textvariable=directory,width=50)
+    dirname.pack(side="left")
+
+    otherMonthView(monthWindow, tree, True, "") # Run first time for current month
+
+    monthBtn = tk.Button(
+        monthWindow, #obj
+        command=lambda:otherMonthView(monthWindow, tree, False, directory.get()), # function
+        textvariable= "", font="Calibri",text= "Search" , bg= "#3EA055", fg="white", height=2, width= 25 #style
+    ).pack()
+    
     
 def addMoney(root):
     # newWindow = tk.Toplevel(root)
@@ -87,11 +99,23 @@ def oweMoney(root):
     add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 
-def otherMonthView(usrInput): 
+def otherMonthView(root, tree, initFLG, usrInput = ""): 
     # Check if the user provided a string, if so give to the parser to check it
     parsedMonth = ""
     if usrInput != "":
         parsedMonth = dateParse(usrInput)
+
+    if parsedMonth == "" and not initFLG:
+        errorWindow = tk.Toplevel(root, width=300, height=300)
+        header = tk.Label(errorWindow, text = "Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!").pack()
+        exit_button = tk.Button(errorWindow, text="Exit", command=errorWindow.destroy)
+        exit_button.pack(pady=20)
+    else:
+        MonthInfo = databaseConnector.getFromDB(parsedMonth,"")
+        for date in MonthInfo:
+            tree.insert("", tk.END, values=date)
+
+
     return parsedMonth
 
 def dateParse(provided):
@@ -122,7 +146,6 @@ def dateParse(provided):
             print(1/0)
 
     except:
-        print("Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!")
         return("")
 
 
@@ -136,4 +159,4 @@ def add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note):
         oweMoney, # Note
         note
     )
-    monthView(root)
+    monthView(root) 
