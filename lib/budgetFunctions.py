@@ -43,20 +43,47 @@ def monthView(root):
     monthBtn = tk.Button(
         monthWindow, #obj
         command=lambda:otherMonthView(monthWindow, tree, False, directory.get()), # function
-        textvariable= "", font="Calibri",text= "Search" , bg= "#3EA055", fg="white", height=2, width= 25 #style
+        textvariable= "", font="Calibri",text= "Search" , bg= "#3EA055", fg="white", height=2, width= 15 #style
     ).pack()
     
     
 def addMoney(root):
-    # newWindow = tk.Toplevel(root)
-    # Temp Values 
-    income= 150
-    outcome= 0
-    toPiggy= 0
-    fromPiggy= 0
-    oweMoney= 0
-    note = "Birthday Gift"
-    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
+    incomeWindow = tk.Toplevel(root)
+    incomeWindow.title("Added a new Income")
+    
+    incomeLabel=StringVar()
+    incomeLabel.set("Insert amount")
+    incomeLabelSet = Label(incomeWindow, textvariable=incomeLabel, height=4)
+    incomeLabelSet.pack(side="left")
+
+    incomeVal=StringVar(None)
+    incomeVal.set(0)
+    incomeValSet = Entry(incomeWindow,textvariable=incomeVal,width=25)
+    incomeValSet.pack(side="left")
+
+    noteLabel=StringVar()
+    noteLabel.set("Add Comment")
+    noteLabelSet = Label(incomeWindow, textvariable=noteLabel, height=4)
+    noteLabelSet.pack(side="left")
+
+    noteText=StringVar(None)
+    noteTextSet = Entry(incomeWindow,textvariable=noteText,width=50)
+    noteTextSet.pack(side="left",pady=50)
+    
+    outcome = 0.0
+    toPiggy = 0.0
+    fromPiggy = 0.0
+    oweMoney = 0.0
+
+    try:
+        incomeBtn = tk.Button(
+            incomeWindow, #obj
+            command=lambda:add2DB(root, float(incomeVal.get()), outcome, toPiggy, fromPiggy, oweMoney, str(noteText.get())), # function
+            textvariable= "", font="Calibri",text= "Add Amount" , bg= "#3EA055", fg="white", height=2, width= 15 #style
+            )
+        incomeBtn.pack(padx= 50, pady=50)
+    except:
+        error(root, "You have to provide a number to the amount you want to add!!")
 
 def addCost(root):
     # Temp Values 
@@ -106,10 +133,7 @@ def otherMonthView(root, tree, initFLG, usrInput = ""):
         parsedMonth = dateParse(usrInput)
 
     if parsedMonth == "" and not initFLG:
-        errorWindow = tk.Toplevel(root, width=300, height=300)
-        header = tk.Label(errorWindow, text = "Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!").pack()
-        exit_button = tk.Button(errorWindow, text="Exit", command=errorWindow.destroy)
-        exit_button.pack(pady=20)
+        error(root,"Something went wrong...\nPlease check your format and try again...\nExample: For may of 2021 type 'may 2021' !!")
     else:
         MonthInfo = databaseConnector.getFromDB(parsedMonth,"")
         for date in MonthInfo:
@@ -149,14 +173,24 @@ def dateParse(provided):
         return("")
 
 
-def add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note):
-    # Is used by every button that adds to the database
-    income = databaseConnector.addToDatabase(
-        income,  #Income
-        outcome,  # Outcome
-        toPiggy, # Piggy In/out
-        fromPiggy,  # Owed Money
-        oweMoney, # Note
-        note
-    )
-    monthView(root) 
+def add2DB(root, income: float, outcome: float, toPiggy: float, fromPiggy: float, oweMoney: float, note: str):
+    try:
+        # Is used by every button that adds to the database
+        income = databaseConnector.addToDatabase(
+            income,  #Income
+            outcome,  # Outcome
+            toPiggy, # Piggy In/out
+            fromPiggy,  # Owed Money
+            oweMoney, # Note
+            note
+        )
+        monthView(root) 
+    except:
+        error(root,"You have to provide a number to the amount you want to add!!")
+
+def error(root, text):
+    errorWindow = tk.Toplevel(root, width=300, height=300)
+    errorWindow.title("Error")
+    header = tk.Label(errorWindow, text = text).pack()
+    exit_button = tk.Button(errorWindow, text="Exit", command=errorWindow.destroy)
+    exit_button.pack(pady=20)
