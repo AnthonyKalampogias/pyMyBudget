@@ -52,7 +52,7 @@ def main():
     piginsBtn = tk.Button(
         root, #obj
         command=lambda:add2Piggy(root), # function
-        textvariable= piginBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
+        textvariable= piginBtnText, font="Calibri", bg= "#D4A017", fg="white", height=2, width= 25 #style
     )
     piginBtnText.set("Add Money to your Piggy")
     piginsBtn.pack(pady= 10)
@@ -63,7 +63,7 @@ def main():
     pigoutBtn = tk.Button(
         root, #obj
         command=lambda:getPiggy(root), # function
-        textvariable= pigoutBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
+        textvariable= pigoutBtnText, font="Calibri", bg= "#C2B280", fg="white", height=2, width= 25 #style
     )
     pigoutBtnText.set("Get Money from your piggy")
     pigoutBtn.pack(pady= 10)
@@ -74,7 +74,7 @@ def main():
     oweBtn = tk.Button(
         root, #obj
         command=lambda:oweMoney(root), # function
-        textvariable= oweBtnText, font="Calibri", bg= "#737CA1", fg="white", height=2, width= 25 #style
+        textvariable= oweBtnText, font="Calibri", bg= "#C85A17", fg="white", height=2, width= 25 #style
     )
     oweBtnText.set("Add Money you owe")
     oweBtn.pack(pady= 10)
