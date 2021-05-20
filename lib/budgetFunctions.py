@@ -2,6 +2,7 @@ from tkinter import ttk, Text, Label, Entry, StringVar
 import tkinter as tk
 from .db import database # Import Database class
 import re
+import inspect
 
 databaseConnector = database() # Database object
 
@@ -47,83 +48,36 @@ def monthView(root):
     ).pack()
     
     
+# Each function now calls popUpManager that will check which function called it and manage the values
 def addMoney(root):
-    incomeWindow = tk.Toplevel(root)
-    incomeWindow.title("Added a new Income")
-    
-    incomeLabel=StringVar()
-    incomeLabel.set("Insert amount")
-    incomeLabelSet = Label(incomeWindow, textvariable=incomeLabel, height=4)
-    incomeLabelSet.pack(side="left")
-
-    incomeVal=StringVar(None)
-    incomeVal.set(0)
-    incomeValSet = Entry(incomeWindow,textvariable=incomeVal,width=25)
-    incomeValSet.pack(side="left")
-
-    noteLabel=StringVar()
-    noteLabel.set("Add Comment")
-    noteLabelSet = Label(incomeWindow, textvariable=noteLabel, height=4)
-    noteLabelSet.pack(side="left")
-
-    noteText=StringVar(None)
-    noteTextSet = Entry(incomeWindow,textvariable=noteText,width=50)
-    noteTextSet.pack(side="left",pady=50)
-    
-    outcome = 0.0
-    toPiggy = 0.0
-    fromPiggy = 0.0
-    oweMoney = 0.0
-
     try:
-        incomeBtn = tk.Button(
-            incomeWindow, #obj
-            command=lambda:add2DB(root, float(incomeVal.get()), outcome, toPiggy, fromPiggy, oweMoney, str(noteText.get())), # function
-            textvariable= "", font="Calibri",text= "Add Amount" , bg= "#3EA055", fg="white", height=2, width= 15 #style
-            )
-        incomeBtn.pack(padx= 50, pady=50)
+        popUpManager(root, "Added a new Income", "Insert amount")
     except:
         error(root, "You have to provide a number to the amount you want to add!!")
 
 def addCost(root):
-    # Temp Values 
-    income= 0
-    outcome= 150
-    toPiggy= 0
-    fromPiggy= 0
-    oweMoney= 0
-    note = "Hotel checkout"
-    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
+    try:
+        popUpManager(root, "Add a new expense", "Add expense amount")
+    except:
+        error(root, "You have to provide a number to the amount you want to add!!")
 
 def add2Piggy(root):
-     # Temp Values 
-    income= 0
-    outcome= 0
-    toPiggy= 100
-    fromPiggy= 0
-    oweMoney= 0
-    note = "Added to piggy!"
-    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
+    try:
+        popUpManager(root, "Add money to your Piggy bank", "Insert amount")
+    except:
+        error(root, "You have to provide a number to the amount you want to add to your Piggy bank!!")
 
 def getPiggy(root):
-     # Temp Values 
-    income= 0
-    outcome= 0
-    toPiggy= 0
-    fromPiggy= 15
-    oweMoney= 0
-    note = "Got Money from your piggy!"
-    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
+    try:
+        popUpManager(root, "Get money to your Piggy bank", "Insert amount")
+    except:
+        error(root, "You have to provide a number to the amount you want to get to your Piggy bank!!")
 
 def oweMoney(root):
-     # Temp Values 
-    income= 0
-    outcome= 0
-    toPiggy= 0
-    fromPiggy= 0
-    oweMoney= 1000
-    note = "You owe {} !".format(oweMoney)
-    add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
+    try:
+        popUpManager(root, "Added a new dept", "Insert amount")
+    except:
+        error(root, "You have to provide a number to the amount that you have to pay back!!")
 
 
 def otherMonthView(root, tree, initFLG, usrInput = ""): 
@@ -186,7 +140,81 @@ def add2DB(root, income: float, outcome: float, toPiggy: float, fromPiggy: float
         )
         monthView(root) 
     except:
-        error(root,"You have to provide a number to the amount you want to add!!")
+        error(root,"Something went wront!\nPlease try again..")
+
+
+def popUpManager(root, titleVal,labelVal):
+    
+    popUp = tk.Toplevel(root)
+    popUp.title(titleVal)
+
+    label=StringVar()
+    label.set(labelVal)
+    costLabelSet = Label(popUp, textvariable=label, height=4)
+    costLabelSet.pack(side="left")
+
+    amountValue=StringVar(None)
+    amountValue.set(0)
+    costValSet = Entry(popUp,textvariable=amountValue,width=25)
+    costValSet.pack(side="left")
+
+    noteLabel=StringVar()
+    noteLabel.set("Add Comment")
+    noteLabelSet = Label(popUp, textvariable=noteLabel, height=4)
+    noteLabelSet.pack(side="left")
+
+    noteText=StringVar(None)
+    noteTextSet = Entry(popUp,textvariable=noteText,width=50)
+    noteTextSet.pack(side="left",pady=50)
+    # init values
+    ## will only change one of these depending on what transaction the user wants
+    income = 0.0
+    outcome = 0.0
+    toPiggy = 0.0
+    fromPiggy = 0.0
+    oweMoney = 0.0
+
+    # Now we will get the name of the caller function with the 3 lines here
+    # This will store the name of the function to callerFunction
+    # which we check with a simple if elif to see which one it was
+    # and after that store the amount the user gave to the according variable
+    curframe = inspect.currentframe()
+    calframe = inspect.getouterframes(curframe, 2)
+    callerFunction = str(calframe[1][3])
+    
+    addButton= tk.Button(
+        popUp, #obj
+        # We now call a function providing all the DB values as well as the string value of the caller function
+        # This is because we now need a new check on the Text widget to occur AFTER the button is pressed and check if it's a float
+        # if we just pass the data directly to the DB it has NOT updated the value from the text widget, we need a way to re-gain that !!
+        command=lambda:addButtonCall(root, callerFunction, str(amountValue.get()),income, outcome, toPiggy, fromPiggy, oweMoney, str(noteText.get())), # function
+        textvariable= "", font="Calibri",text= "Add Amount" , bg= "#3EA055", fg="white", height=2, width= 15 #style
+        )
+    addButton.pack(padx= 50, pady=50)
+
+def addButtonCall(root, callerFunction, amountValue, income, outcome, toPiggy, fromPiggy, oweMoney, note):
+    # this function is only called from the popUpManager
+    # the purpose is once the button is pressed to make it check the Text widgets value and send it to the DB after it checks it
+
+    amountValue = float(amountValue) # Convert to float
+
+    if isinstance(amountValue, float):
+        if callerFunction == "addMoney":
+            income = amountValue
+        elif callerFunction == "addCost":
+            outcome = amountValue
+        elif callerFunction == "add2Piggy":
+            toPiggy = amountValue
+        elif callerFunction == "getPiggy":
+            fromPiggy = amountValue
+        elif callerFunction == "oweMoney":
+            oweMoney = amountValue
+
+    valueList = [income, outcome, toPiggy, fromPiggy, oweMoney]
+    if not all(isinstance(x, float) for x in valueList):
+        print(1/0)
+    else:
+        add2DB(root, income, outcome, toPiggy, fromPiggy, oweMoney, note)
 
 def error(root, text):
     errorWindow = tk.Toplevel(root, width=300, height=300)
