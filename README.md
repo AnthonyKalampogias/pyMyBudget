@@ -8,7 +8,8 @@ pyMyBudget is a python GUI app that helps you keep track of your finances.
 
 ## Usage
 
-Once you start the application you will be presented with some buttons where each buttons executes a specific function, 
+You need to have python `3.8<=higher` installed on your system, 
+You can start the application `python myBudget.py` and once it starts you will be presented with buttons that each executes a specific function, 
 
 for example the `View your Month` button will present you a new window that shows you all the records that the user has registered for this month or any month the user requests to see. 
 
